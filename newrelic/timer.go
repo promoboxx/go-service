@@ -15,8 +15,8 @@ type newrelicTimer struct {
 	app nr.Application
 }
 
-// NewNewrelicTimer returns a timer that logs to newrelic
-func NewNewrelicTimer(environment, serviceName, licenseKey string) (middleware.Timer, error) {
+// NewTimer returns a timer that logs to newrelic
+func NewTimer(environment, serviceName, licenseKey string) (middleware.Timer, error) {
 	config := nr.NewConfig(fmt.Sprintf("%s-%s", environment, serviceName), licenseKey)
 	config.Enabled = false
 	if licenseKey != "" {

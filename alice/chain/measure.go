@@ -33,5 +33,8 @@ func NewBase(b alice.Chain, timer middleware.Timer, logger middleware.Logger) Me
 
 // Measure returns a chain that will have metrics measured
 func (b *base) Measure(name string, handler http.Handler) http.HandlerFunc {
-	return b.baseChain.Append(b.timer.Time(name)).Then(handler).ServeHTTP
+	if b.timer != nil {
+		return b.baseChain.Append(b.timer.Time(name)).Then(handler).ServeHTTP
+	}
+	return b.baseChain.Then(handler).ServeHTTP
 }

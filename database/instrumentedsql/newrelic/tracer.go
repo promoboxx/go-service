@@ -18,12 +18,12 @@ type span struct {
 	segment newrelic.DatastoreSegment
 }
 
-// NewTracer returns a tracer that will fetch spans using opentracing's SpanFromContext function
+// NewTracer returns a tracer that will create segments on a Newrelic Transaction
 func NewTracer() instrumentedsql.Tracer {
 	return tracer{}
 }
 
-// GetSpan will always return a span with an EXISTING transaction.  TODO: start transaction
+// GetSpan will always return a span with an EXISTING transaction.  TODO: start transaction?
 func (tracer) GetSpan(ctx context.Context) instrumentedsql.Span {
 	transaction := ctx.Value(internal.ContextKeyNewrelicTransaction)
 	if t, ok := transaction.(newrelic.Transaction); ok {

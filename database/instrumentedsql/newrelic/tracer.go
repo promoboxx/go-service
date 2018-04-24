@@ -2,6 +2,7 @@ package newrelic
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/ExpansiveWorlds/instrumentedsql"
 	"github.com/healthimation/go-service/internal"
@@ -15,7 +16,7 @@ type tracer struct {
 
 type span struct {
 	txn     newrelic.Transaction
-	segment newrelic.DatastoreSegment
+	segment *newrelic.DatastoreSegment
 }
 
 // NewTracer returns a tracer that will create segments on a Newrelic Transaction
@@ -34,7 +35,7 @@ func (tracer) GetSpan(ctx context.Context) instrumentedsql.Span {
 
 func (s span) NewChild(name string) instrumentedsql.Span {
 	if s.txn != nil {
-		s.segment = newrelic.DatastoreSegment{
+		s.segment = &newrelic.DatastoreSegment{
 			StartTime: newrelic.StartSegmentNow(s.txn),
 			Product:   newrelic.DatastorePostgres,
 			Operation: name,
@@ -46,7 +47,7 @@ func (s span) NewChild(name string) instrumentedsql.Span {
 
 func (s span) SetLabel(k, v string) {
 	if k == "query" {
-		s.segment.ParameterizedQuery = v
+		s.segment.Operation = fmt.Sprintf("(%s) %s", s.segment.Operation, v)
 	}
 	return
 }

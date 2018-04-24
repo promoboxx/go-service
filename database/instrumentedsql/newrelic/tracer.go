@@ -46,6 +46,9 @@ func (s span) NewChild(name string) instrumentedsql.Span {
 }
 
 func (s span) SetLabel(k, v string) {
+	if s.segment == nil {
+		return
+	}
 	if k == "query" {
 		s.segment.Operation = fmt.Sprintf("(%s) %s", s.segment.Operation, v)
 	}
@@ -53,5 +56,9 @@ func (s span) SetLabel(k, v string) {
 }
 
 func (s span) Finish() {
+	if s.segment == nil {
+		return
+	}
+
 	s.segment.End()
 }

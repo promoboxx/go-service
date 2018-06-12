@@ -50,7 +50,7 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		lrw := &loggingResponseWriter{w, http.StatusOK}
 		h.ServeHTTP(lrw, r)
 		if l.logRequests {
-			entry.Printf("Finishing %s - %s - [%d]", r.Method, r.URL.String(), lrw.StatusCode)
+			entry.Printf("%s - [%d] - %s", r.Method, lrw.StatusCode, r.URL.String())
 		}
 	})
 }

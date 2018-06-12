@@ -46,9 +46,7 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		// add logger to the context
 		ctx := context.WithValue(r.Context(), contextKeyLogger, entry)
 		r = r.WithContext(ctx)
-		if l.logRequests {
-			entry.Printf("Starting %s - %s", r.Method, r.URL.String())
-		}
+
 		lrw := &loggingResponseWriter{w, http.StatusOK}
 		h.ServeHTTP(lrw, r)
 		if l.logRequests {

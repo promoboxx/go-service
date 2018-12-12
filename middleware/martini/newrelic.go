@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-martini/martini"
-	"github.com/healthimation/go-service/internal"
+	"github.com/promoboxx/go-service/internal"
 	newrelic "github.com/newrelic/go-agent"
 )
 

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/healthimation/go-service/alice/middleware"
-	"github.com/healthimation/go-service/internal"
+	"github.com/promoboxx/go-service/internal"
 	"github.com/justinas/alice"
 	nr "github.com/newrelic/go-agent"
+	"github.com/promoboxx/go-service/alice/middleware"
 )
 
 type newrelicTimer struct {

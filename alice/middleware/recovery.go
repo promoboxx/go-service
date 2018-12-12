@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/healthimation/go-service/service"
+	"github.com/promoboxx/go-service/service"
 )
 
 // Recovery handles panics

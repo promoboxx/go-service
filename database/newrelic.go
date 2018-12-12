@@ -3,8 +3,8 @@ package database
 import (
 	"context"
 
-	"github.com/healthimation/go-service/internal"
 	newrelic "github.com/newrelic/go-agent"
+	"github.com/promoboxx/go-service/internal"
 )
 
 func newrelicStartDBTimer(ctx context.Context, collection, operation, query string) newrelic.DatastoreSegment {

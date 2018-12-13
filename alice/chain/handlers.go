@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/healthimation/go-service/service"
+	"github.com/promoboxx/go-service/service"
 )
 
 // NotFoundHandler is the generic not found handler to return a problem

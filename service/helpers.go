@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/healthimation/go-glitch/glitch"
+	"github.com/promoboxx/go-glitch/glitch"
 )
 
 // ReturnProblem will return a json http problem response

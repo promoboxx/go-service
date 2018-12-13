@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/ExpansiveWorlds/instrumentedsql"
-	"github.com/healthimation/go-service/internal"
 	newrelic "github.com/newrelic/go-agent"
+	"github.com/promoboxx/go-service/internal"
 )
 
 type contextKey string

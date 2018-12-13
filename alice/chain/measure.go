@@ -3,8 +3,8 @@ package chain
 import (
 	"net/http"
 
-	"github.com/healthimation/go-service/alice/middleware"
 	"github.com/justinas/alice"
+	"github.com/promoboxx/go-service/alice/middleware"
 )
 
 // Measurer can setup a Measured chain

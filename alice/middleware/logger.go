@@ -8,8 +8,11 @@ import (
 )
 
 const (
-	logFieldRequestID = "request_id"
-	logFieldUserID    = "user_id"
+	logFieldRequestID  = "request_id"
+	logFieldUserID     = "user_id"
+	logFieldMethod     = "method"
+	logFieldStatusCode = "status_code"
+	logFieldPath       = "path"
 )
 
 // Logger injects a logger into the context
@@ -40,8 +43,11 @@ func NewLogrusLogger(baseEntry *logrus.Entry, logRequests bool) Logger {
 func (l *logger) Log(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		entry := l.entry.WithFields(logrus.Fields{
-			logFieldRequestID: getRequestIDFromContext(r.Context()),
-			logFieldUserID:    getInsecureUserIDFromContext(r.Context()),
+			logFieldRequestID:  getRequestIDFromContext(r.Context()),
+			logFieldUserID:     getInsecureUserIDFromContext(r.Context()),
+			logFieldMethod:     r.Method,
+			logFieldStatusCode: lrw.StatusCode,
+			logFieldPath:       r.URL.String(),
 		})
 		// add logger to the context
 		ctx := context.WithValue(r.Context(), contextKeyLogger, entry)

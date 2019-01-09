@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Sirupsen/logrus"
+
 	"github.com/promoboxx/go-glitch/glitch"
 )
 
@@ -20,6 +22,17 @@ func ReturnProblem(w http.ResponseWriter, detail, code string, status int) (int,
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	}
 	return status, by
+}
+
+// LogErrorAndReturnProblem logs the given error and returns a json http problem response
+func LogErrorAndReturnProblem(w http.ResponseWriter, detail string, code string, status int, err error, log *logrus.Entry) (int, []byte) {
+	if status >= 500 {
+		log.Error(err)
+	} else {
+		log.Warn(err)
+	}
+
+	return ReturnProblem(w, detail, code, status)
 }
 
 // WriteProblem will write a json http problem response

@@ -4,19 +4,24 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/promoboxx/go-service/alice/middleware"
 
 	"github.com/promoboxx/go-glitch/glitch"
 )
 
 // ReturnProblem will return a json http problem response
-func ReturnProblem(w http.ResponseWriter, detail, code string, status int) (int, []byte) {
+func ReturnProblem(w http.ResponseWriter, detail, code string, status int, err error) (int, []byte) {
 	prob := glitch.HTTPProblem{
 		Title:  http.StatusText(status),
 		Detail: detail,
 		Code:   code,
 		Status: status,
 	}
+
+	if lrw, ok := w.(middleware.LoggingResponseWriter); ok {
+		lrw.InnerError = err
+	}
+
 	by, _ := json.Marshal(prob)
 	if w != nil {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -24,19 +29,8 @@ func ReturnProblem(w http.ResponseWriter, detail, code string, status int) (int,
 	return status, by
 }
 
-// LogErrorAndReturnProblem logs the given error and returns a json http problem response
-func LogErrorAndReturnProblem(w http.ResponseWriter, detail string, code string, status int, err error, log *logrus.Entry) (int, []byte) {
-	if status >= 500 {
-		log.Error(err)
-	} else {
-		log.Warn(err)
-	}
-
-	return ReturnProblem(w, detail, code, status)
-}
-
 // WriteProblem will write a json http problem response
-func WriteProblem(w http.ResponseWriter, detail, code string, status int) error {
+func WriteProblem(w http.ResponseWriter, detail, code string, status int, err error) error {
 	prob := glitch.HTTPProblem{
 		Title:  http.StatusText(status),
 		Detail: detail,
@@ -47,6 +41,11 @@ func WriteProblem(w http.ResponseWriter, detail, code string, status int) error 
 	if err != nil {
 		return err
 	}
+
+	if lrw, ok := w.(middleware.LoggingResponseWriter); ok {
+		lrw.InnerError = err
+	}
+
 	if w != nil {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(status)

@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,7 +19,7 @@ func Recovery(h http.Handler) http.Handler {
 				stack := stack(3)
 				log.Printf("PANIC: %s\n%s", err, stack)
 
-				service.WriteProblem(w, "An error occurred service your request.", "ERROR_SERVICE", http.StatusInternalServerError, errors.New("Error occurred processing request"))
+				service.WriteProblem(w, "An error occurred service your request.", "ERROR_SERVICE", http.StatusInternalServerError, nil)
 			}
 		}()
 		h.ServeHTTP(w, r)

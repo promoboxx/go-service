@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/promoboxx/go-glitch/glitch"
@@ -11,7 +10,6 @@ import (
 
 // ReturnProblem will return a json http problem response
 func ReturnProblem(w http.ResponseWriter, detail, code string, status int, err error) (int, []byte) {
-	log.Printf("error: %v", err)
 	prob := glitch.HTTPProblem{
 		Title:  http.StatusText(status),
 		Detail: detail,

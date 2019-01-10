@@ -18,7 +18,8 @@ func HandlerFunc(h func(w http.ResponseWriter, r *http.Request) error) http.Hand
 	})
 }
 
-// GetDefaultLogger gets a default logger to use
+// GetDefaultLogger gets a default logger to use. level is a number from 0-7, 0 being
+// the most strict and 7 the most verbose
 func GetDefaultLogger(serviceName, environment string, level int) *logrus.Entry {
 	l := logrus.New()
 

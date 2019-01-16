@@ -9,7 +9,7 @@ import (
 )
 
 // ReturnProblem will return a json http problem response
-func ReturnProblem(w http.ResponseWriter, detail, code string, status int, err error) (int, []byte) {
+func ReturnProblem(w http.ResponseWriter, detail, code string, status int, innerErr error) (int, []byte) {
 	prob := glitch.HTTPProblem{
 		Title:  http.StatusText(status),
 		Detail: detail,
@@ -18,7 +18,7 @@ func ReturnProblem(w http.ResponseWriter, detail, code string, status int, err e
 	}
 
 	if loggingResponseWriter, ok := w.(*lrw.LoggingResponseWriter); ok {
-		loggingResponseWriter.InnerError = err
+		loggingResponseWriter.InnerError = innerErr
 	}
 
 	by, _ := json.Marshal(prob)
@@ -30,7 +30,7 @@ func ReturnProblem(w http.ResponseWriter, detail, code string, status int, err e
 }
 
 // WriteProblem will write a json http problem response
-func WriteProblem(w http.ResponseWriter, detail, code string, status int, handlerErr error) error {
+func WriteProblem(w http.ResponseWriter, detail, code string, status int, innerErr error) error {
 	prob := glitch.HTTPProblem{
 		Title:  http.StatusText(status),
 		Detail: detail,
@@ -43,7 +43,7 @@ func WriteProblem(w http.ResponseWriter, detail, code string, status int, handle
 	}
 
 	if lrw, ok := w.(*lrw.LoggingResponseWriter); ok {
-		lrw.InnerError = handlerErr
+		lrw.InnerError = innerErr
 	}
 
 	if w != nil {

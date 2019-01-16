@@ -35,7 +35,6 @@ func NewLogrusLogger(baseEntry *logrus.Entry, logRequests bool) Logger {
 func (l *logger) Log(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		loggingResponseWriter := &lrw.LoggingResponseWriter{w, http.StatusOK, nil}
-		h.ServeHTTP(loggingResponseWriter, r)
 		entry := l.entry.WithFields(logrus.Fields{
 			logFieldRequestID:  getRequestIDFromContext(r.Context()),
 			logFieldUserID:     getInsecureUserIDFromContext(r.Context()),
@@ -48,6 +47,8 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		// add logger to the context
 		ctx := context.WithValue(r.Context(), contextKeyLogger, entry)
 		r = r.WithContext(ctx)
+
+		h.ServeHTTP(loggingResponseWriter, r)
 
 		if l.logRequests {
 			entry.Printf("Finished request")

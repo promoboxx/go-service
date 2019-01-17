@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 // HandlerFunc converts a handler with an error to a standard handler

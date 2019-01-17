@@ -27,6 +27,8 @@ func GetDefaultLogger(serviceName, environment string, level int) *logrus.Entry 
 		l.Level = 0
 	} else if level > len(logrus.AllLevels)-1 {
 		l.Level = logrus.AllLevels[len(logrus.AllLevels)-1]
+	} else {
+		l.Level = logrus.AllLevels[level]
 	}
 
 	l.Formatter = &logrus.JSONFormatter{

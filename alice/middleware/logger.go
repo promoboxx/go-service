@@ -51,14 +51,17 @@ func (l *logger) Log(h http.Handler) http.Handler {
 
 		h.ServeHTTP(loggingResponseWriter, r)
 
-		fields[logFieldStatusCode] = loggingResponseWriter.StatusCode
+		responseFields := fields
+		responseFields[logFieldStatusCode] = loggingResponseWriter.StatusCode
 
 		if loggingResponseWriter.InnerError != nil {
 			fields[logFieldError] = loggingResponseWriter.InnerError
 		}
 
+		responseEntry := l.entry.WithFields(responseFields)
+
 		if l.logRequests {
-			entry.Printf("Finished request")
+			responseEntry.Printf("Finished request")
 		}
 	})
 }

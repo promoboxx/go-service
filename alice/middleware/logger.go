@@ -40,7 +40,7 @@ func NewLogrusLogger(baseEntry *logrus.Entry, logRequests bool) Logger {
 func (l *logger) Log(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		entry := l.entry.WithFields(logrus.Fields{
-			logFieldRequestID: getRequestIDFromContext(r.Context()),
+			logFieldRequestID: GetRequestIDFromContext(r.Context()),
 			logFieldUserID:    getInsecureUserIDFromContext(r.Context()),
 		})
 		// add logger to the context

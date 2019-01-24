@@ -37,7 +37,7 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		loggingResponseWriter := &lrw.LoggingResponseWriter{w, http.StatusOK, nil}
 
 		fields := logrus.Fields{
-			logFieldRequestID: getRequestIDFromContext(r.Context()),
+			logFieldRequestID: GetRequestIDFromContext(r.Context()),
 			logFieldUserID:    getInsecureUserIDFromContext(r.Context()),
 			logFieldMethod:    r.Method,
 			logFieldPath:      r.URL.String(),

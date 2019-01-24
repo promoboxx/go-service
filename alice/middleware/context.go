@@ -24,8 +24,8 @@ func getStringFromContext(ctx context.Context, key contextKey) string {
 	return ""
 }
 
-// getRequestIDFromContext returns the requestID or empty string if missing
-func getRequestIDFromContext(ctx context.Context) string {
+// GetRequestIDFromContext returns the requestID or empty string if missing
+func GetRequestIDFromContext(ctx context.Context) string {
 	return getStringFromContext(ctx, contextKeyRequestID)
 }
 

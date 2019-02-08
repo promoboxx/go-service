@@ -5,6 +5,7 @@ import (
 
 	"github.com/justinas/alice"
 	"github.com/promoboxx/go-service/alice/middleware"
+	"github.com/promoboxx/go-service/alice/middleware/jwtdecode"
 )
 
 // Measurer can setup a Measured chain
@@ -27,13 +28,13 @@ type base struct {
 // router.Get("/user", b.Measure("get users", user.Get()))
 //
 func NewBase(b alice.Chain, timer middleware.Timer, logger middleware.Logger) Measurer {
-	c := b.Append(middleware.Recovery, middleware.UserIDInjector, middleware.RequestID, logger.Log)
+	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtdecode.NewJWTDecoder()).Inject, middleware.RequestID, logger.Log)
 	return &base{baseChain: c, timer: timer}
 }
 
 // NewBaseWithExtras similar to NewBase but allows users to pass in a set of additional constructors to append the the base chain
 func NewBaseWithExtras(b alice.Chain, timer middleware.Timer, logger middleware.Logger, constructors ...alice.Constructor) Measurer {
-	c := b.Append(middleware.Recovery, middleware.UserIDInjector, middleware.RequestID, logger.Log)
+	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtdecode.NewJWTDecoder()).Inject, middleware.RequestID, logger.Log)
 	c = c.Append(constructors...)
 	return &base{baseChain: c, timer: timer}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/promoboxx/go-service/alice/middleware/contextkey"
 	"github.com/promoboxx/go-service/alice/middleware/lrw"
 	"github.com/sirupsen/logrus"
 )
@@ -38,7 +39,7 @@ func (l *logger) Log(h http.Handler) http.Handler {
 
 		fields := logrus.Fields{
 			logFieldRequestID: GetRequestIDFromContext(r.Context()),
-			logFieldUserID:    getInsecureUserIDFromContext(r.Context()),
+			logFieldUserID:    GetInsecureUserIDFromContext(r.Context()),
 			logFieldMethod:    r.Method,
 			logFieldPath:      r.URL.String(),
 		}
@@ -46,7 +47,7 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		entry := l.entry.WithFields(fields)
 
 		// add logger to the context
-		ctx := context.WithValue(r.Context(), contextKeyLogger, entry)
+		ctx := context.WithValue(r.Context(), contextkey.ContextKeyLogger, entry)
 		r = r.WithContext(ctx)
 
 		h.ServeHTTP(loggingResponseWriter, r)

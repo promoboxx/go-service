@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/promoboxx/go-service/alice/middleware/contextkey"
 )
 
 // UserIDInjector add the user id to the context this is not validated for perf reasons
@@ -34,7 +35,7 @@ func UserIDInjector(h http.Handler) http.Handler {
 		}
 
 		// add userID to the context
-		ctx := context.WithValue(r.Context(), contextKeyInsecureUserID, userID)
+		ctx := context.WithValue(r.Context(), contextkey.ContextKeyInsecureUserID, userID)
 		r = r.WithContext(ctx)
 		h.ServeHTTP(w, r)
 	})

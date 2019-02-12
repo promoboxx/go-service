@@ -23,17 +23,17 @@ type base struct {
 // if err != nil {
 // 	log.Fatalf("Could not instantiate newrelic timer: %v", err)
 // }
-// b := chain.NewBase(alice.New(), t, middleware.NewLogrusLogger(logrus.NewEntry(logrus.New())))
+// b := chain.NewBase(alice.New(), t, middleware.NewLogrusLogger(logrus.NewEntry(logrus.New())), jwtdecode.NewJWTDecoder())
 // router.Get("/user", b.Measure("get users", user.Get()))
 //
-func NewBase(b alice.Chain, timer middleware.Timer, logger middleware.Logger) Measurer {
-	c := b.Append(middleware.Recovery, middleware.UserIDInjector, middleware.RequestID, logger.Log)
+func NewBase(b alice.Chain, timer middleware.Timer, logger middleware.Logger, jwtDecoder middleware.JWTDecoder) Measurer {
+	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtDecoder).Inject, middleware.RequestID, logger.Log)
 	return &base{baseChain: c, timer: timer}
 }
 
 // NewBaseWithExtras similar to NewBase but allows users to pass in a set of additional constructors to append the the base chain
-func NewBaseWithExtras(b alice.Chain, timer middleware.Timer, logger middleware.Logger, constructors ...alice.Constructor) Measurer {
-	c := b.Append(middleware.Recovery, middleware.UserIDInjector, middleware.RequestID, logger.Log)
+func NewBaseWithExtras(b alice.Chain, timer middleware.Timer, logger middleware.Logger, jwtDecoder middleware.JWTDecoder, constructors ...alice.Constructor) Measurer {
+	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtDecoder).Inject, middleware.RequestID, logger.Log)
 	c = c.Append(constructors...)
 	return &base{baseChain: c, timer: timer}
 }

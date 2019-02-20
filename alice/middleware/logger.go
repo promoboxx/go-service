@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/promoboxx/go-glitch/glitch"
 	"github.com/promoboxx/go-service/alice/middleware/lrw"
 	"github.com/sirupsen/logrus"
 )
@@ -56,6 +57,12 @@ func (l *logger) Log(h http.Handler) http.Handler {
 
 		if loggingResponseWriter.InnerError != nil {
 			fields[logFieldError] = loggingResponseWriter.InnerError
+
+			if dataErr, ok := loggingResponseWriter.InnerError.(glitch.DataError); ok {
+				for k, v := range dataErr.GetFields() {
+					fields[k] = v
+				}
+			}
 		}
 
 		responseEntry := l.entry.WithFields(responseFields)

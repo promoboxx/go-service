@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/pborman/uuid"
+	"github.com/promoboxx/go-service/alice/middleware/contextkey"
 )
 
 const (
@@ -22,7 +23,7 @@ func RequestID(h http.Handler) http.Handler {
 		}
 
 		// add rID to the context
-		ctx := context.WithValue(r.Context(), contextKeyRequestID, rID)
+		ctx := context.WithValue(r.Context(), contextkey.ContextKeyRequestID, rID)
 		r = r.WithContext(ctx)
 		h.ServeHTTP(w, r)
 	})

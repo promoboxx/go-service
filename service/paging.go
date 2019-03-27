@@ -10,8 +10,8 @@ import (
 type PagingParams struct {
 	PageSize   *int32
 	PageNumber *int32
-	SortField  string
-	SortAsc    bool
+	SortField  *string
+	SortAsc    *bool
 }
 
 // ParsePagingParams retrieves paging params from the request, allows for whitelisting sort field values
@@ -39,16 +39,18 @@ func ParsePagingParams(r *http.Request, sortFieldsWhitelist []string) (PagingPar
 		if err != nil {
 			return paging, err
 		}
-		paging.SortAsc = sortAsc
+		paging.SortAsc = &sortAsc
 	}
 
 	// sort field
 	sortField := r.URL.Query().Get("sort_field")
-	if !contains(sortFieldsWhitelist, sortField) {
-		sortFieldErr := fmt.Errorf("invalid sort field %s", sortField)
-		return paging, sortFieldErr
+	if len(sortField) > 0 {
+		if !contains(sortFieldsWhitelist, sortField) {
+			sortFieldErr := fmt.Errorf("invalid sort field %s", sortField)
+			return paging, sortFieldErr
+		}
+		paging.SortField = &sortField
 	}
-	paging.SortField = sortField
 
 	return paging, nil
 }

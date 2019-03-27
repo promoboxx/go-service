@@ -24,7 +24,7 @@ func TestUnit_ParsePagingParams(t *testing.T) {
 				return req
 			},
 			validate: func(t *testing.T, req *http.Request) {
-				pagingParams, err := ParsePagingParams(req, []string{"foo"})
+				pagingParams, err := ParsePagingParams(req, []string{"foo", "bar"})
 				assert.Nil(t, err)
 
 				assert.Equal(t, int32(1), *pagingParams.PageNumber)
@@ -41,7 +41,7 @@ func TestUnit_ParsePagingParams(t *testing.T) {
 				return req
 			},
 			validate: func(t *testing.T, req *http.Request) {
-				_, err := ParsePagingParams(req, []string{})
+				_, err := ParsePagingParams(req, []string{"bar"})
 				assert.NotNil(t, err)
 			},
 		},

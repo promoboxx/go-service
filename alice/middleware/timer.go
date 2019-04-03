@@ -29,10 +29,13 @@ func NewNullTimer() Timer {
 type openTracingTimer struct {
 }
 
+// NewOpenTracingTimer creates a new timer that uses opentracing spans
 func NewOpenTracingTimer() Timer {
 	return &openTracingTimer{}
 }
 
+// Time returns a middleware that will handle creating spans and tracing
+// for each request
 func (ott *openTracingTimer) Time(name string) alice.Constructor {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

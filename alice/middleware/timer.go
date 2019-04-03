@@ -42,6 +42,7 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 			ctx := r.Context()
 			span, ctx := opentracing.StartSpanFromContext(ctx, name)
 			defer span.Finish()
+			h.ServeHTTP(w, r)
 		})
 	}
 }

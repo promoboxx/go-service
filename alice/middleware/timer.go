@@ -53,7 +53,6 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 
 			spanCtx, err := tracer.Extract(tracer.HTTPHeadersCarrier(r.Header))
 			if err != nil && err != tracer.ErrSpanContextNotFound {
-
 				log.Printf("Error extracting tracing headers: %v", err)
 			}
 
@@ -63,7 +62,7 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 				span, ctx = tracer.StartSpanFromContext(r.Context(), name)
 				err = tracer.Inject(span.Context(), tracer.HTTPHeadersCarrier(r.Header))
 				if err != nil {
-					// Handle or log injection error
+					log.Printf("Error injecting tracing headers: %v", err)
 				}
 				r.WithContext(ctx)
 			}

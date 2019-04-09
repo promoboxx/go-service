@@ -4,10 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
+	"github.com/opentracing/opentracing-go"
 
 	"github.com/justinas/alice"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // Timer can time a handler and log it
@@ -43,31 +42,28 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log := GetLoggerFromContext(r.Context())
+			var span opentracing.Span
 			var ctx context.Context
-			var span ddtrace.Span
-			defer func() {
-				if span != nil {
-					span.Finish()
-				}
-			}()
-
-			spanCtx, err := tracer.Extract(tracer.HTTPHeadersCarrier(r.Header))
-			if err != nil && err != tracer.ErrSpanContextNotFound {
-				log.Printf("Error extracting tracing headers: %v", err)
+			sctx, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
+			if err != nil && err != opentracing.ErrSpanContextNotFound {
+				log.Errorf("Error extracting headers from context: %v", err)
 			}
 
-			if spanCtx != nil {
-				span = tracer.StartSpan(name, tracer.ChildOf(spanCtx))
+			// if there was no span context start one
+			if sctx == nil {
+				span, ctx = opentracing.StartSpanFromContext(r.Context(), name)
 			} else {
-				span, ctx = tracer.StartSpanFromContext(r.Context(), name)
-				err = tracer.Inject(span.Context(), tracer.HTTPHeadersCarrier(r.Header))
+				span = opentracing.StartSpan(name, opentracing.ChildOf(sctx))
+				err = opentracing.GlobalTracer().Inject(span.Context(), opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
 				if err != nil {
-					log.Printf("Error injecting tracing headers: %v", err)
+					log.Errorf("Error injecting headers: %v", err)
 				}
-				r.WithContext(ctx)
 			}
 
-			h.ServeHTTP(w, r)
+			defer span.Finish()
+			newReq := r.WithContext(ctx)
+
+			h.ServeHTTP(w, newReq)
 		})
 	}
 }

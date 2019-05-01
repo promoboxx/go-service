@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/promoboxx/go-glitch/glitch"
 	"github.com/promoboxx/go-service/alice/middleware/lrw"
@@ -70,4 +71,19 @@ func WriteJSONResponse(w http.ResponseWriter, status int, data interface{}) erro
 		_, err = w.Write(by)
 	}
 	return err
+}
+
+// Int32PointerFromQueryParam returns a nullable int32 from a query param key
+func Int32PointerFromQueryParam(r *http.Request, paramName string) (*int32, error) {
+	strValue := r.URL.Query().Get(paramName)
+	var intPointer *int32
+	if len(strValue) > 0 {
+		i, err := strconv.ParseInt(strValue, 10, 32)
+		if err != nil {
+			return intPointer, err
+		}
+		i32 := int32(i)
+		intPointer = &i32
+	}
+	return intPointer, nil
 }

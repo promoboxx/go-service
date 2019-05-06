@@ -1,7 +1,6 @@
 package trace
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/opentracing/opentracing-go"
@@ -25,7 +24,7 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log := middleware.GetLoggerFromContext(r.Context())
 			var span opentracing.Span
-			var ctx context.Context
+			ctx := r.Context()
 			sctx, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
 			if err != nil && err != opentracing.ErrSpanContextNotFound {
 				log.Errorf("Error extracting headers from context: %v", err)

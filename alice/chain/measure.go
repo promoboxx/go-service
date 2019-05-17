@@ -15,6 +15,7 @@ type Measurer interface {
 type base struct {
 	baseChain alice.Chain
 	timer     middleware.Timer
+	logger    middleware.Logger
 }
 
 // NewBase gets a new measurer with the provided base chain
@@ -27,21 +28,21 @@ type base struct {
 // router.Get("/user", b.Measure("get users", user.Get()))
 //
 func NewBase(b alice.Chain, timer middleware.Timer, logger middleware.Logger, jwtDecoder middleware.JWTDecoder) Measurer {
-	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtDecoder).Inject, middleware.RequestID, logger.Log)
-	return &base{baseChain: c, timer: timer}
+	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtDecoder).Inject, middleware.RequestID)
+	return &base{baseChain: c, timer: timer, logger: logger}
 }
 
 // NewBaseWithExtras similar to NewBase but allows users to pass in a set of additional constructors to append the the base chain
 func NewBaseWithExtras(b alice.Chain, timer middleware.Timer, logger middleware.Logger, jwtDecoder middleware.JWTDecoder, constructors ...alice.Constructor) Measurer {
-	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtDecoder).Inject, middleware.RequestID, logger.Log)
+	c := b.Append(middleware.Recovery, middleware.NewUserIDInjector(jwtDecoder).Inject, middleware.RequestID)
 	c = c.Append(constructors...)
-	return &base{baseChain: c, timer: timer}
+	return &base{baseChain: c, timer: timer, logger: logger}
 }
 
 // Measure returns a chain that will have metrics measured
 func (b *base) Measure(name string, handler http.Handler) http.HandlerFunc {
 	if b.timer != nil {
-		return b.baseChain.Append(b.timer.Time(name)).Then(handler).ServeHTTP
+		return b.baseChain.Append(b.timer.Time(name)).Append(b.logger.Log).Then(handler).ServeHTTP
 	}
 	return b.baseChain.Then(handler).ServeHTTP
 }

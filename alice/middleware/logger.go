@@ -42,9 +42,11 @@ func (l *logger) Log(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// base fields that get added to each log entry
 		fields := logrus.Fields{
-			logFieldUserID:  GetInsecureUserIDFromContext(r.Context()),
-			logFieldMethod:  r.Method,
-			logFieldPath:    r.URL.String(),
+			logFieldUserID: GetInsecureUserIDFromContext(r.Context()),
+			logFieldMethod: r.Method,
+			logFieldPath:   r.URL.String(),
+			// this header comes from the data dog span information that gets injected
+			// every request from the headers
 			logFieldTraceID: r.Header.Get("X-Datadog-Trace-ID"),
 		}
 

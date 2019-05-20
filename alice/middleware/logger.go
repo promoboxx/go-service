@@ -4,9 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/promoboxx/go-service/alice/middleware/lrw"
+
 	"github.com/promoboxx/go-glitch/glitch"
 	"github.com/promoboxx/go-service/alice/middleware/contextkey"
-	"github.com/promoboxx/go-service/alice/middleware/lrw"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,6 +18,7 @@ const (
 	logFieldStatusCode = "status_code"
 	logFieldPath       = "path"
 	logFieldError      = "error"
+	logFieldTraceID    = "dd.trace_id"
 )
 
 // Logger injects a logger into the context
@@ -34,15 +36,18 @@ func NewLogrusLogger(baseEntry *logrus.Entry, logRequests bool) Logger {
 	return &logger{entry: baseEntry, logRequests: logRequests}
 }
 
+// Log is the middleware for injecting a logger into the context that has
+// request specific information
 func (l *logger) Log(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		loggingResponseWriter := &lrw.LoggingResponseWriter{w, http.StatusOK, nil}
-
+		// base fields that get added to each log entry
 		fields := logrus.Fields{
-			logFieldRequestID: GetRequestIDFromContext(r.Context()),
-			logFieldUserID:    GetInsecureUserIDFromContext(r.Context()),
-			logFieldMethod:    r.Method,
-			logFieldPath:      r.URL.String(),
+			logFieldUserID: GetInsecureUserIDFromContext(r.Context()),
+			logFieldMethod: r.Method,
+			logFieldPath:   r.URL.String(),
+			// this header comes from the data dog span information that gets injected
+			// every request from the headers
+			logFieldTraceID: r.Header.Get("X-Datadog-Trace-ID"),
 		}
 
 		entry := l.entry.WithFields(fields)
@@ -51,17 +56,20 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), contextkey.ContextKeyLogger, entry)
 		r = r.WithContext(ctx)
 
-		h.ServeHTTP(loggingResponseWriter, r)
+		h.ServeHTTP(w, r)
 
 		responseFields := fields
-		responseFields[logFieldStatusCode] = loggingResponseWriter.StatusCode
 
-		if loggingResponseWriter.InnerError != nil {
-			fields[logFieldError] = loggingResponseWriter.InnerError
+		if loggingResponseWriter, ok := w.(*lrw.LoggingResponseWriter); ok {
+			responseFields[logFieldStatusCode] = loggingResponseWriter.StatusCode
 
-			if dataErr, ok := loggingResponseWriter.InnerError.(glitch.DataError); ok {
-				for k, v := range dataErr.GetFields() {
-					fields[k] = v
+			if loggingResponseWriter.InnerError != nil {
+				fields[logFieldError] = loggingResponseWriter.InnerError
+
+				if dataErr, ok := loggingResponseWriter.InnerError.(glitch.DataError); ok {
+					for k, v := range dataErr.GetFields() {
+						fields[k] = v
+					}
 				}
 			}
 		}

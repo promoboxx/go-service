@@ -18,6 +18,10 @@ func ReturnProblem(w http.ResponseWriter, detail, code string, status int, inner
 		Status: status,
 	}
 
+	if dataErr, ok := innerErr.(glitch.DataError); ok {
+		prob.IsTransient = dataErr.IsTransient()
+	}
+
 	if loggingResponseWriter, ok := w.(*lrw.LoggingResponseWriter); ok {
 		loggingResponseWriter.InnerError = innerErr
 	}
@@ -38,6 +42,11 @@ func WriteProblem(w http.ResponseWriter, detail, code string, status int, innerE
 		Code:   code,
 		Status: status,
 	}
+
+	if dataErr, ok := innerErr.(glitch.DataError); ok {
+		prob.IsTransient = dataErr.IsTransient()
+	}
+
 	by, err := json.Marshal(prob)
 	if err != nil {
 		return err

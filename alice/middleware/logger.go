@@ -72,6 +72,10 @@ func (l *logger) Log(h http.Handler) http.Handler {
 					}
 				}
 			}
+
+			for fieldName, message := range loggingResponseWriter.ExtraFields {
+				fields[fieldName] = message
+			}
 		}
 
 		responseEntry := l.entry.WithFields(responseFields)

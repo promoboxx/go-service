@@ -29,7 +29,7 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// make the response writer a logging response writer so we can access the status code
-			w = &lrw.LoggingResponseWriter{w, http.StatusOK, nil}
+			w = lrw.NewLoggingResponseWriter(w)
 			var span opentracing.Span
 			ctx := r.Context()
 

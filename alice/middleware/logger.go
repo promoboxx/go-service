@@ -44,7 +44,7 @@ func (l *logger) Log(h http.Handler) http.Handler {
 		fields := logrus.Fields{
 			logFieldUserID: GetInsecureUserIDFromContext(r.Context()),
 			logFieldMethod: r.Method,
-			logFieldPath:   r.URL.String(),
+			logFieldPath:   r.URL.Path,
 			// this header comes from the data dog span information that gets injected
 			// every request from the headers
 			logFieldTraceID: r.Header.Get("X-Datadog-Trace-ID"),

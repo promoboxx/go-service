@@ -109,13 +109,6 @@ func TestUnit_ParseCustomType(t *testing.T) {
 				require.Contains(t, actualErr.Error(), "unexpected ';'")
 			},
 		},
-		//"exceptional path- invalid start to custom type": {
-		//	testBytes: []byte(`;;`),
-		//	validate: func(t *testing.T, actualErr error, actualElems [][]byte) {
-		//		require.Error(t, actualErr)
-		//		require.Contains(t, actualErr.Error(), "unexpected ';'")
-		//	},
-		//},
 		"exceptional path- invalid delimeter": {
 			testBytes: []byte(`("foobar";)`),
 			validate: func(t *testing.T, actualErr error, actualElems [][]byte) {

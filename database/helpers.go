@@ -41,6 +41,27 @@ func QuoteAndEscapeRecordValue(text string) string {
 	return string(append(result, '\\', '"'))
 }
 
+// QuoteString wraps a string properly for use in a Postgres custom type.
+func QuoteString(s string) string {
+	b := []byte{}
+	v := []byte(s)
+	b = append(b, '"')
+	for {
+		i := bytes.IndexAny(v, `"\`)
+		if i < 0 {
+			b = append(b, v...)
+			break
+		}
+		if i > 0 {
+			b = append(b, v[:i]...)
+		}
+		b = append(b, '\\', v[i])
+		v = v[i+1:]
+	}
+	b = append(b, '"')
+	return string(b)
+}
+
 // ParseCustomType parses a Postgres custom type retrieved from the database.
 func ParseCustomType(src, del []byte) (elems [][]byte, err error) {
 	var i int

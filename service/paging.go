@@ -6,8 +6,8 @@ import (
 )
 
 type Sort struct {
-	Field     string
-	Direction string
+	Field     string `json:"field"`
+	Direction string `json:"direction"`
 }
 
 func (s Sort) Valid(fieldWhiteList []string) bool {
@@ -28,9 +28,9 @@ func (s Sort) Valid(fieldWhiteList []string) bool {
 
 // PagingParams represents paging and sorting parameter values
 type PagingParams struct {
-	PageSize   *int32
-	Offset     *int32
-	SortFields []Sort
+	PageSize   *int32 `json:"page_size"`
+	Offset     *int32 `json:"offset"`
+	SortFields []Sort `json:"sort_fields"`
 }
 
 // ParsePagingParams retrieves paging params from the request, allows for whitelisting sort field values

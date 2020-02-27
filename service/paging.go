@@ -1,55 +1,74 @@
 package service
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
+	"strings"
 )
+
+type Sort struct {
+	Field     string `json:"field"`
+	Direction string `json:"direction"`
+}
+
+func (s Sort) Valid(fieldWhiteList []string) bool {
+	if s.Field == "" || !contains(fieldWhiteList, s.Field) {
+		return false
+	}
+
+	switch s.Direction {
+	case "asc",
+		"desc":
+	// no-op
+	default:
+		return false
+	}
+
+	return true
+}
 
 // PagingParams represents paging and sorting parameter values
 type PagingParams struct {
-	PageSize   *int32
-	PageNumber *int32
-	SortField  *string
-	SortAsc    *bool
+	PageSize   *int32 `json:"page_size"`
+	Offset     *int32 `json:"offset"`
+	SortFields []Sort `json:"sort_fields"`
 }
 
 // ParsePagingParams retrieves paging params from the request, allows for whitelisting sort field values
-func ParsePagingParams(r *http.Request, sortFieldsWhitelist []string) (PagingParams, error) {
-	paging := PagingParams{}
+func ParsePagingParams(r *http.Request, defaults PagingParams, sortFieldsWhitelist []string) (PagingParams, error) {
+	paging := defaults
 
-	// page number
-	pageNumber, err := Int32PointerFromQueryParam(r, "page_number")
+	// offset (page number)
+	offset, err := Int32PointerFromQueryParam(r, "offset")
 	if err != nil {
 		return paging, err
 	}
-	paging.PageNumber = pageNumber
+	if offset != nil {
+		paging.Offset = offset
+	}
 
 	// page size
 	pageSize, err := Int32PointerFromQueryParam(r, "page_size")
 	if err != nil {
 		return paging, err
 	}
-	paging.PageSize = pageSize
-
-	// sort asc
-	sortAscStr := r.URL.Query().Get("sort_asc")
-	if len(sortAscStr) > 0 {
-		sortAsc, err := strconv.ParseBool(sortAscStr)
-		if err != nil {
-			return paging, err
-		}
-		paging.SortAsc = &sortAsc
+	if pageSize != nil {
+		paging.PageSize = pageSize
 	}
 
-	// sort field
-	sortField := r.URL.Query().Get("sort_field")
-	if len(sortField) > 0 {
-		if !contains(sortFieldsWhitelist, sortField) {
-			sortFieldErr := fmt.Errorf("invalid sort field %s", sortField)
-			return paging, sortFieldErr
+	// Sort fields
+	sorts := strings.Split(r.URL.Query().Get("sort"), ",")
+	for _, sort := range sorts {
+		if sort != "" {
+			d := strings.Split(sort, ":")
+			s := Sort{
+				Field:     d[0],
+				Direction: d[1],
+			}
+
+			if valid := s.Valid(sortFieldsWhitelist); valid {
+				paging.SortFields = append(paging.SortFields, s)
+			}
 		}
-		paging.SortField = &sortField
 	}
 
 	return paging, nil

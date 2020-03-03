@@ -95,6 +95,28 @@ func TestUnit_ParsePagingParams(t *testing.T) {
 				require.ElementsMatch(t, sortFields, pagingParams.SortFields)
 			},
 		},
+		"base path- no defaults, sort data is normalized": {
+			request: func(t *testing.T) *http.Request {
+				req, err := http.NewRequest("GET", "http://example.com?offset=1&page_size=100&sort=FoO:ASC", nil)
+				require.NoError(t, err)
+				return req
+			},
+			validate: func(t *testing.T, req *http.Request) {
+				pagingParams, err := ParsePagingParams(req, PagingParams{}, []string{"foo", "bar"})
+				require.NoError(t, err)
+
+				sortFields := []Sort{
+					{
+						Field:     "foo",
+						Direction: "asc",
+					},
+				}
+
+				require.Equal(t, int32(1), *pagingParams.Offset)
+				require.Equal(t, int32(100), *pagingParams.PageSize)
+				require.ElementsMatch(t, sortFields, pagingParams.SortFields)
+			},
+		},
 		"base path- all defaults set, no parameters in request": {
 			request: func(t *testing.T) *http.Request {
 				req, err := http.NewRequest("GET", "http://example.com", nil)

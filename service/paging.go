@@ -61,8 +61,8 @@ func ParsePagingParams(r *http.Request, defaults PagingParams, sortFieldsWhiteli
 		if sort != "" {
 			d := strings.Split(sort, ":")
 			s := Sort{
-				Field:     d[0],
-				Direction: d[1],
+				Field:     strings.ToLower(d[0]),
+				Direction: strings.ToLower(d[1]),
 			}
 
 			if valid := s.Valid(sortFieldsWhitelist); valid {

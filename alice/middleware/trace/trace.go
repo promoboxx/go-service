@@ -40,13 +40,8 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 				log.Printf("error extracting span data: %v", err)
 			}
 
-			// if there was no span context start one
-			if sctx == nil {
-				span, ctx = opentracing.StartSpanFromContext(r.Context(), "http.request")
-			} else {
-				// start a new span as a child of the existing span
-				span = opentracing.StartSpan("http.request", opentracing.ChildOf(sctx))
-			}
+			// start a new span as a child of the existing span
+			span, ctx = opentracing.StartSpanFromContext(r.Context(), "http.request", opentracing.ChildOf(sctx))
 
 			// required to get trace search and analytics
 			span.SetTag(ext.AnalyticsEvent, true)

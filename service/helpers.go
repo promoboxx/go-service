@@ -67,6 +67,39 @@ func WriteProblem(w http.ResponseWriter, detail, code string, status int, innerE
 	return err
 }
 
+// WriteProblemWithMetadata writes a normal http problem but will also add metadata to the response
+func WriteProblemWithMetadata(w http.ResponseWriter, detail, code string, status int, innerErr error, metadata interface{}) error {
+	prob := glitch.HTTPProblemMetadata{
+		HTTPProblem: glitch.HTTPProblem{
+			Title:  http.StatusText(status),
+			Detail: detail,
+			Code:   code,
+			Status: status,
+		},
+		Metadata: metadata,
+	}
+
+	if dataErr, ok := innerErr.(glitch.DataError); ok {
+		prob.IsTransient = dataErr.IsTransient()
+	}
+
+	by, err := json.Marshal(prob)
+	if err != nil {
+		return err
+	}
+
+	if lrw, ok := w.(*lrw.LoggingResponseWriter); ok {
+		lrw.InnerError = innerErr
+	}
+
+	if w != nil {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(status)
+		_, err = w.Write(by)
+	}
+	return err
+}
+
 // WriteJSONResponse will write a json response to the htt.ResponseWriter
 func WriteJSONResponse(w http.ResponseWriter, status int, data interface{}) error {
 	var by []byte

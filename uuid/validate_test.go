@@ -23,6 +23,14 @@ func TestIsValid(t *testing.T) {
 				assert.Equal(t, result, expected)
 			},
 		},
+		{
+			name:     "works if the uuid is all the same number",
+			uuid:     "00000000-0000-0000-0000-000000000000",
+			expected: true,
+			validate: func(t *testing.T, result bool, expected bool) {
+				assert.Equal(t, result, expected)
+			},
+		},
 	}
 
 	for _, tc := range tests {

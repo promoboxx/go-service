@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIsValid(t *testing.T) {
+func TestUnit_IsValid(t *testing.T) {
 	type testCase struct {
 		name     string
 		uuid     string

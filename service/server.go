@@ -8,3 +8,8 @@ type Server interface {
 	GetEnvironment() string
 	GetServiceName() string
 }
+
+type ListenerConfig struct {
+	Port int
+	Addr string
+}

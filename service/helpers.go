@@ -150,6 +150,24 @@ func Int64ArrayFromQueryParam(r *http.Request, paramName string) ([]int64, error
 	return ret, nil
 }
 
+func Int32ArrayFromQueryParam(r *http.Request, paramName string) ([]int32, error) {
+	var result []int32
+	str := r.URL.Query().Get(paramName)
+	if len(str) == 0 {
+		return result, nil
+	}
+	parts := strings.Split(str, ",")
+
+	for _, v := range parts {
+		i64, err := strconv.ParseInt(v, 10, 32)
+		if err != nil {
+			return nil, fmt.Errorf("%s is not an integer", v)
+		}
+		result = append(result, int32(i64))
+	}
+	return result, nil
+}
+
 func TimestampFromQueryParam(r *http.Request, paramName string) (*time.Time, error) {
 	str := r.URL.Query().Get(paramName)
 	if len(str) == 0 {

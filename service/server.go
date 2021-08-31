@@ -10,6 +10,6 @@ type Server interface {
 }
 
 type ListenerConfig struct {
-	Port int
-	Addr string
+	Port int    `json:"port"`
+	Addr string `json:"addr"`
 }

@@ -61,6 +61,8 @@ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
+github.com/promoboxx/go-auth v0.0.0-20211124161352-21e466468422 h1:+Ubtw2u572Mkn+zYJ/NUOd20ULuV5BV2974X0Xz5N+A=
+github.com/promoboxx/go-auth v0.0.0-20211124161352-21e466468422/go.mod h1:cd8vCe+NWCcEZsjhBF/utrBlBpapFNgGArIRVoQTpvI=
 github.com/promoboxx/go-cache v0.0.0-20181213202604-7d4bd5b61d19 h1:j88AElkVcTSmQmiqo7GC7RPJOuWpmVStU74j8oseqE0=
 github.com/promoboxx/go-cache v0.0.0-20181213202604-7d4bd5b61d19/go.mod h1:CJ2dtgUATwH0mocjizfzNc6ak6aUwL2CpilRHVo7UXQ=
 github.com/promoboxx/go-discovery v0.0.0-20181214185844-c169e2d45a22 h1:dgd2TWDSRiOcWrDCLtI+w4t2ujEOwY0nN6orM6R8l0w=

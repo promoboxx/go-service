@@ -7,4 +7,6 @@ const (
 	ContextKeyLogger ContextKey = iota
 	ContextKeyRequestID
 	ContextKeyInsecureUserID
+	ContextKeyClaims
+	ContextKeyDBConn
 )

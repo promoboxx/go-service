@@ -12,6 +12,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/philhofer/fwd v1.1.1 // indirect
+	github.com/promoboxx/go-auth v0.0.0-20211124161352-21e466468422
 	github.com/promoboxx/go-cache v0.0.0-20181213202604-7d4bd5b61d19 // indirect
 	github.com/promoboxx/go-discovery v0.0.0-20181214185844-c169e2d45a22
 	github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8

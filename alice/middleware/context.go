@@ -2,7 +2,9 @@ package middleware
 
 import (
 	"context"
+	"database/sql"
 
+	"github.com/promoboxx/go-auth/src/auth"
 	"github.com/promoboxx/go-service/alice/middleware/contextkey"
 	"github.com/sirupsen/logrus"
 )
@@ -33,4 +35,12 @@ func GetLoggerFromContext(ctx context.Context) *logrus.Entry {
 		return entry
 	}
 	return logrus.NewEntry(logrus.New()) // default to a new entry
+}
+
+func GetClaimsFromContext(ctx context.Context) auth.Claim {
+	return ctx.Value(contextkey.ContextKeyClaims).(auth.Claim)
+}
+
+func GetDBConnFromContext(ctx context.Context) *sql.DB {
+	return ctx.Value(contextkey.ContextKeyDBConn).(*sql.DB)
 }

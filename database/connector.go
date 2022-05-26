@@ -40,14 +40,15 @@ func init() {
 
 func NewSQLDBConnector(maxOpenConns, maxIdleConns int, dbName string, driver string, sslMode string, dbUser string, dbPass string, finder discovery.Finder, metricsClient metrics.Client) SQLDBConnector {
 	return &sqlDBConnector{
-		maxOpenConns: maxOpenConns,
-		maxIdleConns: maxIdleConns,
-		dbName:       dbName,
-		driver:       driver,
-		dbUser:       dbUser,
-		dbPass:       dbPass,
-		sslMode:      sslMode,
-		finder:       finder,
+		maxOpenConns:  maxOpenConns,
+		maxIdleConns:  maxIdleConns,
+		dbName:        dbName,
+		driver:        driver,
+		dbUser:        dbUser,
+		dbPass:        dbPass,
+		sslMode:       sslMode,
+		finder:        finder,
+		metricsClient: metricsClient,
 	}
 }
 

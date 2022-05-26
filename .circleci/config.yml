@@ -3,6 +3,9 @@ jobs:
   test:
     docker:
       - image: pbxx/go-docker-base
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
     working_directory: /go/src/github.com/promoboxx/go-glitch
     steps:
       - checkout

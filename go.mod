@@ -9,6 +9,8 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/husobee/vestigo v1.1.1
 	github.com/justinas/alice v1.2.0
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/lib/pq v1.10.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/philhofer/fwd v1.1.1 // indirect
@@ -17,6 +19,7 @@ require (
 	github.com/promoboxx/go-discovery v0.0.0-20181214185844-c169e2d45a22
 	github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8
 	github.com/promoboxx/go-metric-client v0.0.0-20201112163557-b8fada91c33a
+	github.com/promoboxx/instrumentedsql v0.0.0-20200314013837-109ed18d1e95
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect

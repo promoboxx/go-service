@@ -3,13 +3,19 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"net/url"
 	"sync"
 
+	"github.com/lib/pq"
 	"github.com/promoboxx/go-discovery/src/discovery"
 	"github.com/promoboxx/go-metric-client/metrics"
+	"github.com/promoboxx/instrumentedsql"
+	"github.com/promoboxx/instrumentedsql/opentracing"
 )
+
+func init() {
+	sql.Register("instrumented-postgres", instrumentedsql.WrapDriver(&pq.Driver{}, instrumentedsql.WithTracer(opentracing.NewTracer())))
+}
 
 type SQLDBConnector interface {
 	GetConnection() (*sql.DB, error)
@@ -58,28 +64,29 @@ func (c *sqlDBConnector) GetConnection() (*sql.DB, error) {
 		return nil, fmt.Errorf("Could not find connection string for service: %v- %s", c.dbName, err)
 	}
 
-	db, err := c.getDbFromMap(connString)
+	db, err := c.getDbFromMap(c.driver, connString)
 	if err != nil {
 		return nil, fmt.Errorf("Could not get db connection: %v", err)
 	}
 
-	c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-max-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().MaxOpenConnections))
-	c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-max-idle-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().Idle))
-	c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-open-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().OpenConnections))
-	c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-in-use-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().InUse))
+	if c.metricsClient != nil {
+		c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-max-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().MaxOpenConnections))
+		c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-max-idle-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().Idle))
+		c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-open-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().OpenConnections))
+		c.metricsClient.InternalCustom("database.connections", "get-connection", "connection-pool-in-use-conns", map[string]string{"db-name": c.dbName}, int64(db.Stats().InUse))
+	}
 
 	return db, nil
 }
 
 // GetDbFromMap is a thread safe way to get a connection from the map or create a new one
-func (c *sqlDBConnector) getDbFromMap(conn string) (result *sql.DB, err error) {
+func (c *sqlDBConnector) getDbFromMap(driver string, conn string) (result *sql.DB, err error) {
 	key := fmt.Sprintf("%s|%s", c.driver, conn)
 	var ok bool
 	mapLock.RLock()
 	result, ok = connMap[key]
 	mapLock.RUnlock()
 	if ok {
-		log.Printf("found connection")
 		return
 	}
 	// need to create a connection
@@ -90,22 +97,19 @@ func (c *sqlDBConnector) getDbFromMap(conn string) (result *sql.DB, err error) {
 		return
 	}
 
-	result, err = sql.Open("postgres", conn)
+	result, err = sql.Open(driver, conn)
 	if err != nil {
-		log.Printf("error from open: %s", err)
 		return nil, fmt.Errorf("Could not connect to DB: %v", err)
 	}
 	result.SetMaxOpenConns(c.maxOpenConns)
 	result.SetMaxIdleConns(c.maxIdleConns)
 	connMap[key] = result
-	log.Printf("made new connection")
 	return
 }
 
 func (c *sqlDBConnector) getConnectionString() (string, error) {
 	dbAddr, dbPort, err := c.finder.FindHostPort(fmt.Sprintf("%s-db", c.dbName))
 	if err != nil {
-		log.Printf("got error here")
 		return "", err
 	}
 

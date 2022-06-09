@@ -31,6 +31,14 @@ func TestUnit_IsValid(t *testing.T) {
 				assert.Equal(t, result, expected)
 			},
 		},
+		{
+			name:     "fails when the uuid is empty",
+			uuid:     "",
+			expected: false,
+			validate: func(t *testing.T, result bool, expected bool) {
+				assert.Equal(t, result, expected)
+			},
+		},
 	}
 
 	for _, tc := range tests {

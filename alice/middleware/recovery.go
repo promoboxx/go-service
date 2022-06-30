@@ -35,6 +35,10 @@ var (
 	slash     = []byte("/")
 )
 
+func GetStack(skip int) []byte {
+	return stack(skip)
+}
+
 // stack returns a nicely formated stack frame, skipping skip frames
 func stack(skip int) []byte {
 	buf := new(bytes.Buffer) // the returned data

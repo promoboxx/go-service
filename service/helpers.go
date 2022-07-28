@@ -100,6 +100,12 @@ func WriteProblemWithMetadata(w http.ResponseWriter, detail, code string, status
 	return err
 }
 
+// Writes the given error as a json http problem response to the `http.ResponseWriter`, and
+// returns the raw error
+func WriteDataError(w http.ResponseWriter, err glitch.DataError, status int) error {
+	return WriteProblem(w, err.Msg(), err.Code(), status, err.Inner())
+}
+
 // WriteJSONResponse will write a json response to the htt.ResponseWriter
 func WriteJSONResponse(w http.ResponseWriter, status int, data interface{}) error {
 	var by []byte

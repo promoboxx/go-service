@@ -7,14 +7,14 @@ import (
 	"sync"
 
 	"github.com/lib/pq"
+	"github.com/luna-duclos/instrumentedsql"
+	"github.com/luna-duclos/instrumentedsql/opentracing"
 	"github.com/promoboxx/go-discovery/src/discovery"
 	"github.com/promoboxx/go-metric-client/metrics"
-	"github.com/promoboxx/instrumentedsql"
-	"github.com/promoboxx/instrumentedsql/opentracing"
 )
 
 func init() {
-	sql.Register("instrumented-postgres", instrumentedsql.WrapDriver(&pq.Driver{}, instrumentedsql.WithTracer(opentracing.NewTracer())))
+	sql.Register("instrumented-postgres", instrumentedsql.WrapDriver(&pq.Driver{}, instrumentedsql.WithTracer(opentracing.NewTracer(false))))
 }
 
 type SQLDBConnector interface {

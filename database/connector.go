@@ -14,7 +14,9 @@ import (
 )
 
 func init() {
-	sql.Register("instrumented-postgres", instrumentedsql.WrapDriver(&pq.Driver{}, instrumentedsql.WithTracer(opentracing.NewTracer(false))))
+	sql.Register("instrumented-postgres", instrumentedsql.WrapDriver(&pq.Driver{},
+		instrumentedsql.WithTracer(opentracing.NewTracer(false)),
+		instrumentedsql.WithOmitArgs()))
 }
 
 type SQLDBConnector interface {

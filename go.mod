@@ -13,7 +13,7 @@ require (
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/uuid v1.3.0
-	github.com/honeybadger-io/honeybadger-go v0.5.0 // indirect
+	github.com/honeybadger-io/honeybadger-go v0.5.0
 	github.com/husobee/vestigo v1.1.1
 	github.com/justinas/alice v1.2.0
 	github.com/lib/pq v1.10.6

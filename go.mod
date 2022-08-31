@@ -8,10 +8,12 @@ require (
 	github.com/DataDog/datadog-go/v5 v5.1.1 // indirect
 	github.com/DataDog/sketches-go v1.4.1 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
+	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/uuid v1.3.0
+	github.com/honeybadger-io/honeybadger-go v0.5.0 // indirect
 	github.com/husobee/vestigo v1.1.1
 	github.com/justinas/alice v1.2.0
 	github.com/lib/pq v1.10.6

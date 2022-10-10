@@ -9,4 +9,5 @@ const (
 	ContextKeyInsecureUserID
 	ContextKeyClaims
 	ContextKeyDBConn
+	ContextKeyProducer
 )

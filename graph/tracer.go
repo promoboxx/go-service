@@ -11,7 +11,7 @@ import (
 	opentracingLog "github.com/opentracing/opentracing-go/log"
 )
 
-// Originally taken from public domain with an Unlicense: https://github.com/99designs/gqlgen-contrib/blob/master/gqlopentracing/tracer.go
+// Originally taken from public domain with an Unlicense and modified: https://github.com/99designs/gqlgen-contrib/blob/master/gqlopentracing/tracer.go
 // This is a gqlgen extension that enables tracing through opentracing for each overall operation that gqlgen encounters
 // as well as each field that is accessed
 

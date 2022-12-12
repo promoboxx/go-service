@@ -1,3 +1,6 @@
+# github.com/99designs/gqlgen v0.17.22
+## explicit
+github.com/99designs/gqlgen/graphql
 # github.com/DataDog/datadog-agent/pkg/obfuscate v0.36.1
 ## explicit
 github.com/DataDog/datadog-agent/pkg/obfuscate
@@ -106,15 +109,17 @@ github.com/shirou/gopsutil/mem
 # github.com/sirupsen/logrus v1.8.1
 ## explicit
 github.com/sirupsen/logrus
-# github.com/stretchr/testify v1.7.0
+# github.com/stretchr/testify v1.7.1
 ## explicit
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # github.com/tinylib/msgp v1.1.6
 ## explicit
 github.com/tinylib/msgp/msgp
-# golang.org/x/sys v0.0.0-20220608164250-635b8c9b7f68
-## explicit
+# github.com/vektah/gqlparser/v2 v2.5.1
+github.com/vektah/gqlparser/v2/ast
+github.com/vektah/gqlparser/v2/gqlerror
+# golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
@@ -174,5 +179,5 @@ gopkg.in/DataDog/dd-trace-go.v1/internal/osinfo
 gopkg.in/DataDog/dd-trace-go.v1/internal/samplernames
 gopkg.in/DataDog/dd-trace-go.v1/internal/traceprof
 gopkg.in/DataDog/dd-trace-go.v1/internal/version
-# gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+# gopkg.in/yaml.v3 v3.0.1
 gopkg.in/yaml.v3

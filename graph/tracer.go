@@ -15,27 +15,37 @@ import (
 // This is a gqlgen extension that enables tracing through opentracing for each overall operation that gqlgen encounters
 // as well as each field that is accessed
 
-type Tracer struct{}
+type tracer struct{}
 
-var _ interface {
+type GraphQLTracer interface {
 	graphql.HandlerExtension
 	graphql.OperationInterceptor
 	graphql.FieldInterceptor
-} = &Tracer{}
+}
+
+// Creates a GraphQL tracing extension that can be used with a gqlgen server like this:
+//
+//		graphqlSrv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
+//				Resolvers: &graph.Resolver{},
+//		}))
+//	    graphqlSrv.Use(graph.NewGraphQLTracer())
+func NewGraphQLTracer() GraphQLTracer {
+	return tracer{}
+}
 
 // HandlerExtension: sets up basic metadata for the extension
 
-func (t Tracer) ExtensionName() string {
+func (t tracer) ExtensionName() string {
 	return "OpenTracing"
 }
 
-func (t Tracer) Validate(schema graphql.ExecutableSchema) error {
+func (t tracer) Validate(schema graphql.ExecutableSchema) error {
 	return nil
 }
 
 // OperationIntercepter: intercepts the entire query operation before it hits gqlgen
 
-func (t Tracer) InterceptOperation(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 	oc := graphql.GetOperationContext(ctx)
 
 	span, ctx := opentracing.StartSpanFromContext(ctx, oc.RawQuery)
@@ -48,7 +58,7 @@ func (t Tracer) InterceptOperation(ctx context.Context, next graphql.OperationHa
 
 // FieldIntercepter: intercepts each individual GraphQL field before it is executed
 
-func (t Tracer) InterceptField(ctx context.Context, next graphql.Resolver) (interface{}, error) {
+func (t tracer) InterceptField(ctx context.Context, next graphql.Resolver) (interface{}, error) {
 	fc := graphql.GetFieldContext(ctx)
 
 	span := opentracing.SpanFromContext(ctx)

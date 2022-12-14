@@ -3,6 +3,7 @@ module github.com/promoboxx/go-service
 go 1.15
 
 require (
+	github.com/99designs/gqlgen v0.17.22
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.36.1 // indirect
 	github.com/DataDog/datadog-go v4.8.3+incompatible // indirect
 	github.com/DataDog/datadog-go/v5 v5.1.1 // indirect
@@ -27,9 +28,8 @@ require (
 	github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8
 	github.com/promoboxx/go-metric-client v0.0.0-20201112163557-b8fada91c33a
 	github.com/sirupsen/logrus v1.8.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/tinylib/msgp v1.1.6 // indirect
-	golang.org/x/sys v0.0.0-20220608164250-635b8c9b7f68 // indirect
 	golang.org/x/time v0.0.0-20220411224347-583f2d630306 // indirect
 	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df // indirect
 	gopkg.in/DataDog/dd-trace-go.v1 v1.38.1

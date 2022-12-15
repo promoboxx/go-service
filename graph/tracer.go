@@ -23,12 +23,13 @@ type GraphQLTracer interface {
 	graphql.FieldInterceptor
 }
 
-// Creates a GraphQL tracing extension that can be used with a gqlgen server like this:
+// Creates a GraphQL tracing extension that can be used with a gqlgen server like this (you will need to prepend NewGraphQLTracer
+// with whatever package prefix you assign it in the import statement)
 //
 //		graphqlSrv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
 //				Resolvers: &graph.Resolver{},
 //		}))
-//	    graphqlSrv.Use(graph.NewGraphQLTracer())
+//	    graphqlSrv.Use(NewGraphQLTracer())
 func NewGraphQLTracer() GraphQLTracer {
 	return tracer{}
 }
@@ -48,9 +49,10 @@ func (t tracer) Validate(schema graphql.ExecutableSchema) error {
 func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 	oc := graphql.GetOperationContext(ctx)
 
-	span, ctx := opentracing.StartSpanFromContext(ctx, oc.RawQuery)
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gqlgen-operation")
 	ext.SpanKind.Set(span, "server")
 	ext.Component.Set(span, "gqlgen")
+	span.SetTag("query", oc.RawQuery)
 	defer span.Finish()
 
 	return next(ctx)
@@ -61,8 +63,7 @@ func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHa
 func (t tracer) InterceptField(ctx context.Context, next graphql.Resolver) (interface{}, error) {
 	fc := graphql.GetFieldContext(ctx)
 
-	span := opentracing.SpanFromContext(ctx)
-	span.SetOperationName(fc.Object + "_" + fc.Field.Name)
+	span, ctx := opentracing.StartSpanFromContext(ctx, fc.Object+"_"+fc.Field.Name)
 	span.SetTag("resolver.object", fc.Object)
 	span.SetTag("resolver.field", fc.Field.Name)
 	defer span.Finish()

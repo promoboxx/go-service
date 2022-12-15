@@ -49,7 +49,7 @@ func (t tracer) Validate(schema graphql.ExecutableSchema) error {
 func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 	oc := graphql.GetOperationContext(ctx)
 
-	span, ctx := opentracing.StartSpanFromContext(ctx, "gqlgen-operation")
+	span, ctx := opentracing.StartSpanFromContext(ctx, oc.OperationName)
 	ext.SpanKind.Set(span, "server")
 	ext.Component.Set(span, "gqlgen")
 	span.SetTag("query", oc.RawQuery)

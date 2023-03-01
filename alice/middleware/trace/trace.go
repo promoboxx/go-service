@@ -36,7 +36,7 @@ func (ott *openTracingTimer) Time(name string) alice.Constructor {
 			// attempt to extract any span information in case this request is coming from somewhere
 			// that may have already set one
 			sctx, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
-			if err != nil && err != tracer.ErrSpanContextNotFound {
+			if err != nil && (err != tracer.ErrSpanContextNotFound || err != opentracing.ErrSpanContextNotFound) {
 				log.Printf("error extracting span data: %v", err)
 			}
 

@@ -24,15 +24,16 @@ type SQLDBConnector interface {
 }
 
 type sqlDBConnector struct {
-	maxOpenConns  int
-	maxIdleConns  int
-	dbName        string
-	driver        string
-	dbUser        string
-	dbPass        string
-	sslMode       string
-	finder        discovery.Finder
-	metricsClient metrics.Client
+	maxOpenConns        int
+	maxIdleConns        int
+	dbName              string
+	driver              string
+	dbUser              string
+	dbPass              string
+	sslMode             string
+	sslRootCertFilename string
+	finder              discovery.Finder
+	metricsClient       metrics.Client
 }
 
 // keeps track of the db pool for each connection string
@@ -46,17 +47,18 @@ func init() {
 	connMap = make(map[string]*sql.DB)
 }
 
-func NewSQLDBConnector(maxOpenConns, maxIdleConns int, dbName string, driver string, sslMode string, dbUser string, dbPass string, finder discovery.Finder, metricsClient metrics.Client) SQLDBConnector {
+func NewSQLDBConnector(maxOpenConns, maxIdleConns int, dbName string, driver string, sslMode string, sslRootCertFilename string, dbUser string, dbPass string, finder discovery.Finder, metricsClient metrics.Client) SQLDBConnector {
 	return &sqlDBConnector{
-		maxOpenConns:  maxOpenConns,
-		maxIdleConns:  maxIdleConns,
-		dbName:        dbName,
-		driver:        driver,
-		dbUser:        dbUser,
-		dbPass:        dbPass,
-		sslMode:       sslMode,
-		finder:        finder,
-		metricsClient: metricsClient,
+		maxOpenConns:        maxOpenConns,
+		maxIdleConns:        maxIdleConns,
+		dbName:              dbName,
+		driver:              driver,
+		dbUser:              dbUser,
+		dbPass:              dbPass,
+		sslMode:             sslMode,
+		sslRootCertFilename: sslRootCertFilename,
+		finder:              finder,
+		metricsClient:       metricsClient,
 	}
 }
 
@@ -115,5 +117,5 @@ func (c *sqlDBConnector) getConnectionString() (string, error) {
 		return "", err
 	}
 
-	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", c.dbUser, url.QueryEscape(c.dbPass), dbAddr, dbPort, c.dbName, c.sslMode), nil
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s&sslrootcert=%s", c.dbUser, url.QueryEscape(c.dbPass), dbAddr, dbPort, c.dbName, c.sslMode, c.sslRootCertFilename), nil
 }

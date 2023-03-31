@@ -31,7 +31,7 @@ type sqlDBConnector struct {
 	dbUser              string
 	dbPass              string
 	sslMode             string
-	sslRootCertFilename string
+	sslRootCertFilename *string
 	finder              discovery.Finder
 	metricsClient       metrics.Client
 }
@@ -47,7 +47,7 @@ func init() {
 	connMap = make(map[string]*sql.DB)
 }
 
-func NewSQLDBConnector(maxOpenConns, maxIdleConns int, dbName string, driver string, sslMode string, sslRootCertFilename string, dbUser string, dbPass string, finder discovery.Finder, metricsClient metrics.Client) SQLDBConnector {
+func NewSQLDBConnector(maxOpenConns, maxIdleConns int, dbName string, driver string, sslMode string, sslRootCertFilename *string, dbUser string, dbPass string, finder discovery.Finder, metricsClient metrics.Client) SQLDBConnector {
 	return &sqlDBConnector{
 		maxOpenConns:        maxOpenConns,
 		maxIdleConns:        maxIdleConns,
@@ -117,5 +117,10 @@ func (c *sqlDBConnector) getConnectionString() (string, error) {
 		return "", err
 	}
 
-	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s&sslrootcert=%s", c.dbUser, url.QueryEscape(c.dbPass), dbAddr, dbPort, c.dbName, c.sslMode, c.sslRootCertFilename), nil
+	sslrootcert := "" // by default, no sslrootcert option will be added to the connection string
+	if c.sslRootCertFilename != nil {
+		sslrootcert = "&sslrootcert=" + *c.sslRootCertFilename
+	}
+
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s%s", c.dbUser, url.QueryEscape(c.dbPass), dbAddr, dbPort, c.dbName, c.sslMode, sslrootcert), nil
 }

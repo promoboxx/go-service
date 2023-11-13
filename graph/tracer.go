@@ -8,6 +8,8 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 
+	ddext "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
+
 	opentracingLog "github.com/opentracing/opentracing-go/log"
 )
 
@@ -53,6 +55,7 @@ func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHa
 	ext.SpanKind.Set(span, "server")
 	ext.Component.Set(span, "gqlgen")
 	span.SetTag("query", oc.RawQuery)
+	span.SetTag(ddext.ResourceName, oc.OperationName)
 	defer span.Finish()
 
 	return next(ctx)

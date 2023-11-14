@@ -57,6 +57,8 @@ func WriteProblem(w http.ResponseWriter, detail, code string, status int, innerE
 
 	if lrw, ok := w.(*lrw.LoggingResponseWriter); ok {
 		lrw.InnerError = innerErr
+		lrw.AddLogField("error_code", code)
+		lrw.AddLogField("error_detail", detail)
 	}
 
 	if w != nil {
@@ -90,6 +92,8 @@ func WriteProblemWithMetadata(w http.ResponseWriter, detail, code string, status
 
 	if lrw, ok := w.(*lrw.LoggingResponseWriter); ok {
 		lrw.InnerError = innerErr
+		lrw.AddLogField("error_code", code)
+		lrw.AddLogField("error_detail", detail)
 	}
 
 	if w != nil {

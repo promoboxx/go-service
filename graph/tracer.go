@@ -58,7 +58,24 @@ func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHa
 	span.SetTag(ddext.ResourceName, oc.OperationName)
 	defer span.Finish()
 
-	return next(ctx)
+	responseHandler := next(ctx)
+
+	errList := graphql.GetErrors(ctx)
+	if len(errList) > 0 {
+		ext.Error.Set(span, true)
+		span.LogFields(
+			opentracingLog.String("event", "error"),
+		)
+
+		for i, err := range errList {
+			span.LogFields(
+				opentracingLog.String(fmt.Sprintf("error.%d.message", i), err.Error()),
+				opentracingLog.String(fmt.Sprintf("error.%d.kind", i), fmt.Sprintf("%T", err)),
+			)
+		}
+	}
+
+	return responseHandler
 }
 
 // FieldIntercepter: intercepts each individual GraphQL field before it is executed

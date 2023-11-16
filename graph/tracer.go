@@ -8,8 +8,6 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 
-	ddext "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
-
 	opentracingLog "github.com/opentracing/opentracing-go/log"
 )
 
@@ -21,8 +19,8 @@ type tracer struct{}
 
 type GraphQLTracer interface {
 	graphql.HandlerExtension
-	graphql.OperationInterceptor
 	graphql.FieldInterceptor
+	graphql.ResponseInterceptor
 }
 
 // Creates a GraphQL tracing extension that can be used with a gqlgen server like this (you will need to prepend NewGraphQLTracer
@@ -46,36 +44,26 @@ func (t tracer) Validate(schema graphql.ExecutableSchema) error {
 	return nil
 }
 
-// OperationIntercepter: intercepts the entire query operation before it hits gqlgen
-
-func (t tracer) InterceptOperation(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+func (t tracer) InterceptResponse(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gqlgen-resolver")
 	oc := graphql.GetOperationContext(ctx)
-
-	span, ctx := opentracing.StartSpanFromContext(ctx, oc.OperationName)
 	ext.SpanKind.Set(span, "server")
 	ext.Component.Set(span, "gqlgen")
 	span.SetTag("query", oc.RawQuery)
-	span.SetTag(ddext.ResourceName, oc.OperationName)
 	defer span.Finish()
 
-	responseHandler := next(ctx)
+	res := next(ctx)
 
 	errList := graphql.GetErrors(ctx)
 	if len(errList) > 0 {
 		ext.Error.Set(span, true)
 		span.LogFields(
 			opentracingLog.String("event", "error"),
+			opentracingLog.String("error.message", errList.Error()),
 		)
-
-		for i, err := range errList {
-			span.LogFields(
-				opentracingLog.String(fmt.Sprintf("error.%d.message", i), err.Error()),
-				opentracingLog.String(fmt.Sprintf("error.%d.kind", i), fmt.Sprintf("%T", err)),
-			)
-		}
 	}
 
-	return responseHandler
+	return res
 }
 
 // FieldIntercepter: intercepts each individual GraphQL field before it is executed
@@ -103,6 +91,14 @@ func (t tracer) InterceptField(ctx context.Context, next graphql.Resolver) (inte
 				opentracingLog.String(fmt.Sprintf("error.%d.kind", i), fmt.Sprintf("%T", err)),
 			)
 		}
+	}
+
+	if err != nil {
+		ext.Error.Set(span, true)
+		span.LogFields(
+			opentracingLog.String("event", "error"),
+			opentracingLog.String("error.message", err.Error()),
+		)
 	}
 
 	return res, err

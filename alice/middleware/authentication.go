@@ -12,13 +12,15 @@ import (
 func Auth(token auth.Token) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			claims, err := token.ValidateJWT(r.Header.Get("Authorization"))
+			jwt := r.Header.Get("Authorization")
+			claims, err := token.ValidateJWT(jwt)
 			if err != nil {
 				service.WriteProblem(w, "Could not validate JWT", "NOT_AUTHORIZED", http.StatusUnauthorized, err)
 				return
 			}
 
 			ctx := context.WithValue(r.Context(), contextkey.ContextKeyClaims, claims)
+			ctx = context.WithValue(ctx, contextkey.ContextKeyJWT, jwt)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
@@ -44,6 +46,7 @@ func AuthOptional(token auth.Token) func(http.Handler) http.Handler {
 			}
 
 			ctx := context.WithValue(r.Context(), contextkey.ContextKeyClaims, claims)
+			ctx = context.WithValue(ctx, contextkey.ContextKeyJWT, authRaw)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

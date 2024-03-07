@@ -10,4 +10,5 @@ const (
 	ContextKeyClaims
 	ContextKeyDBConn
 	ContextKeyProducer
+	ContextKeyJWT
 )

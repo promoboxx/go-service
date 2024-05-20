@@ -11,4 +11,5 @@ const (
 	ContextKeyDBConn
 	ContextKeyProducer
 	ContextKeyJWT
+	ContextKeyDB
 )

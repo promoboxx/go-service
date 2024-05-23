@@ -44,3 +44,11 @@ func GetClaimsFromContext(ctx context.Context) auth.Claim {
 func GetDBConnFromContext(ctx context.Context) *sql.DB {
 	return ctx.Value(contextkey.ContextKeyDBConn).(*sql.DB)
 }
+
+func GetDBFromContext[T any](ctx context.Context, f func(*sql.DB) T) T {
+	if ctx.Value(contextkey.ContextKeyDB) == nil {
+		return f(GetDBConnFromContext(ctx))
+	}
+
+	return ctx.Value(contextkey.ContextKeyDB).(T)
+}

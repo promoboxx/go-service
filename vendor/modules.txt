@@ -1,17 +1,17 @@
 # github.com/99designs/gqlgen v0.17.22
-## explicit
+## explicit; go 1.16
 github.com/99designs/gqlgen/graphql
 # github.com/DataDog/datadog-agent/pkg/obfuscate v0.36.1
-## explicit
+## explicit; go 1.12
 github.com/DataDog/datadog-agent/pkg/obfuscate
 # github.com/DataDog/datadog-go v4.8.3+incompatible
 ## explicit
 github.com/DataDog/datadog-go/statsd
 # github.com/DataDog/datadog-go/v5 v5.1.1
-## explicit
+## explicit; go 1.13
 github.com/DataDog/datadog-go/v5/statsd
 # github.com/DataDog/sketches-go v1.4.1
-## explicit
+## explicit; go 1.15
 github.com/DataDog/sketches-go/ddsketch
 github.com/DataDog/sketches-go/ddsketch/encoding
 github.com/DataDog/sketches-go/ddsketch/mapping
@@ -19,17 +19,20 @@ github.com/DataDog/sketches-go/ddsketch/pb/sketchpb
 github.com/DataDog/sketches-go/ddsketch/stat
 github.com/DataDog/sketches-go/ddsketch/store
 # github.com/Microsoft/go-winio v0.5.2
-## explicit
+## explicit; go 1.13
 github.com/Microsoft/go-winio
 github.com/Microsoft/go-winio/pkg/guid
 # github.com/StackExchange/wmi v1.2.1
-## explicit
+## explicit; go 1.13
 github.com/StackExchange/wmi
 # github.com/cespare/xxhash/v2 v2.1.2
+## explicit; go 1.11
 github.com/cespare/xxhash/v2
 # github.com/davecgh/go-spew v1.1.1
+## explicit
 github.com/davecgh/go-spew/spew
 # github.com/dgraph-io/ristretto v0.1.0
+## explicit; go 1.12
 github.com/dgraph-io/ristretto
 github.com/dgraph-io/ristretto/z
 github.com/dgraph-io/ristretto/z/simd
@@ -37,12 +40,14 @@ github.com/dgraph-io/ristretto/z/simd
 ## explicit
 github.com/dgrijalva/jwt-go
 # github.com/dustin/go-humanize v1.0.0
+## explicit
 github.com/dustin/go-humanize
 # github.com/go-ole/go-ole v1.2.5
+## explicit; go 1.12
 github.com/go-ole/go-ole
 github.com/go-ole/go-ole/oleutil
 # github.com/golang/glog v1.0.0
-## explicit
+## explicit; go 1.11
 github.com/golang/glog
 # github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 ## explicit
@@ -51,27 +56,27 @@ github.com/golang/groupcache/singleflight
 ## explicit
 github.com/google/uuid
 # github.com/honeybadger-io/honeybadger-go v0.5.0
-## explicit
+## explicit; go 1.12
 github.com/honeybadger-io/honeybadger-go
 # github.com/husobee/vestigo v1.1.1
 ## explicit
 github.com/husobee/vestigo
 # github.com/justinas/alice v1.2.0
-## explicit
+## explicit; go 1.12
 github.com/justinas/alice
 # github.com/lib/pq v1.10.6
-## explicit
+## explicit; go 1.13
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/lib/pq/scram
 # github.com/luna-duclos/instrumentedsql v1.1.3
-## explicit
+## explicit; go 1.11
 github.com/luna-duclos/instrumentedsql
 # github.com/luna-duclos/instrumentedsql/opentracing v0.0.0-20201103091713-40d03108b6f4
-## explicit
+## explicit; go 1.14
 github.com/luna-duclos/instrumentedsql/opentracing
 # github.com/opentracing/opentracing-go v1.2.0
-## explicit
+## explicit; go 1.14
 github.com/opentracing/opentracing-go
 github.com/opentracing/opentracing-go/ext
 github.com/opentracing/opentracing-go/log
@@ -79,12 +84,16 @@ github.com/opentracing/opentracing-go/log
 ## explicit
 github.com/patrickmn/go-cache
 # github.com/pborman/uuid v1.2.0
+## explicit
 github.com/pborman/uuid
 # github.com/philhofer/fwd v1.1.1
+## explicit
 github.com/philhofer/fwd
 # github.com/pkg/errors v0.9.1
+## explicit
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
+## explicit
 github.com/pmezard/go-difflib/difflib
 # github.com/promoboxx/go-auth v0.0.0-20211124161352-21e466468422
 ## explicit
@@ -97,29 +106,32 @@ github.com/promoboxx/go-cache/src/storage/memory
 ## explicit
 github.com/promoboxx/go-discovery/src/discovery
 # github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8
-## explicit
+## explicit; go 1.15
 github.com/promoboxx/go-glitch/glitch
 # github.com/promoboxx/go-metric-client v0.0.0-20201112163557-b8fada91c33a
-## explicit
+## explicit; go 1.14
 github.com/promoboxx/go-metric-client/metrics
 # github.com/shirou/gopsutil v2.18.12+incompatible
+## explicit
 github.com/shirou/gopsutil/internal/common
 github.com/shirou/gopsutil/load
 github.com/shirou/gopsutil/mem
 # github.com/sirupsen/logrus v1.8.1
-## explicit
+## explicit; go 1.13
 github.com/sirupsen/logrus
 # github.com/stretchr/testify v1.7.1
-## explicit
+## explicit; go 1.13
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # github.com/tinylib/msgp v1.1.6
-## explicit
+## explicit; go 1.14
 github.com/tinylib/msgp/msgp
 # github.com/vektah/gqlparser/v2 v2.5.1
+## explicit; go 1.16
 github.com/vektah/gqlparser/v2/ast
 github.com/vektah/gqlparser/v2/gqlerror
 # golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
+## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
@@ -128,10 +140,11 @@ golang.org/x/sys/windows/registry
 ## explicit
 golang.org/x/time/rate
 # golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df
-## explicit
+## explicit; go 1.17
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
 # google.golang.org/protobuf v1.28.0
+## explicit; go 1.11
 google.golang.org/protobuf/encoding/prototext
 google.golang.org/protobuf/encoding/protowire
 google.golang.org/protobuf/internal/descfmt
@@ -158,7 +171,7 @@ google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
 # gopkg.in/DataDog/dd-trace-go.v1 v1.38.1
-## explicit
+## explicit; go 1.12
 gopkg.in/DataDog/dd-trace-go.v1/ddtrace
 gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext
 gopkg.in/DataDog/dd-trace-go.v1/ddtrace/internal
@@ -180,4 +193,5 @@ gopkg.in/DataDog/dd-trace-go.v1/internal/samplernames
 gopkg.in/DataDog/dd-trace-go.v1/internal/traceprof
 gopkg.in/DataDog/dd-trace-go.v1/internal/version
 # gopkg.in/yaml.v3 v3.0.1
+## explicit
 gopkg.in/yaml.v3

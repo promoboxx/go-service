@@ -15,7 +15,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/promoboxx/go-auth v0.0.0-20211124161352-21e466468422
 	github.com/promoboxx/go-discovery v0.0.0-20181214185844-c169e2d45a22
-	github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8
+	github.com/promoboxx/go-glitch v0.0.0-20240524115203-9ec2e145ebc5
 	github.com/promoboxx/go-metric-client v0.0.0-20201112163557-b8fada91c33a
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.1

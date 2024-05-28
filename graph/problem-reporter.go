@@ -7,6 +7,7 @@ import (
 	"github.com/promoboxx/go-service/alice/middleware"
 )
 
-func ReportProblem(ctx context.Context, prob *glitch.GQLProblem, msg string) {
-	middleware.GetLoggerFromContext(ctx).WithError(prob).Error(msg)
+func ReportProblem(ctx context.Context, prob *glitch.GQLProblem, logMsg string) error {
+	middleware.GetLoggerFromContext(ctx).WithError(prob).Error(logMsg)
+	return prob
 }

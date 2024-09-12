@@ -36,6 +36,8 @@ workflows:
   version: 2
   test:
     jobs:
-      - run-static-analysis-job
+      - run-static-analysis-job:
+          context:
+            - datadog
       - test:
           context: "dockerhub"

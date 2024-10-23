@@ -1,4 +1,7 @@
 version: 2.1
+orbs:
+  datadog: datadog/datadog-static-analyzer-circleci-orb@1.0.4
+
 jobs:
   test:
     docker:
@@ -18,9 +21,23 @@ jobs:
       - run:
           name: go test
           command: go test -race -run Unit ./...
+  run-static-analysis-job:
+    docker:
+      - image: cimg/node:current
+    steps:
+      - checkout
+      - datadog/analyze:
+          service: "go-service"
+          env: "ci"
+          site: datadoghq.com
+          cpu_count: 2
+
 workflows:
-  version: 2.1
+  version: 2
   test:
     jobs:
+      - run-static-analysis-job:
+          context:
+            - datadog
       - test:
           context: "dockerhub"

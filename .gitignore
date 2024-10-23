@@ -1,0 +1,6 @@
+bin
+secret.env
+*.out
+/.idea
+tmp
+.direnv

@@ -1,6 +1,10 @@
 package service
 
-import "github.com/husobee/vestigo"
+import (
+	"net/http"
+
+	"github.com/husobee/vestigo"
+)
 
 // Server can GetRouter
 type Server interface {
@@ -13,3 +17,4 @@ type ListenerConfig struct {
 	Port int
 	Addr string
 }
+

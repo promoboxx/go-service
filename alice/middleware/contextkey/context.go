@@ -12,4 +12,5 @@ const (
 	ContextKeyProducer
 	ContextKeyJWT
 	ContextKeyDB
+	ContextKeyCanary
 )

@@ -1,8 +1,6 @@
 package service
 
 import (
-	"net/http"
-
 	"github.com/husobee/vestigo"
 )
 
@@ -17,4 +15,3 @@ type ListenerConfig struct {
 	Port int
 	Addr string
 }
-

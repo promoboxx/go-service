@@ -571,8 +571,6 @@ github.com/promoboxx/go-cache v0.0.0-20181213202604-7d4bd5b61d19 h1:j88AElkVcTSm
 github.com/promoboxx/go-cache v0.0.0-20181213202604-7d4bd5b61d19/go.mod h1:CJ2dtgUATwH0mocjizfzNc6ak6aUwL2CpilRHVo7UXQ=
 github.com/promoboxx/go-discovery v0.0.0-20181214185844-c169e2d45a22 h1:dgd2TWDSRiOcWrDCLtI+w4t2ujEOwY0nN6orM6R8l0w=
 github.com/promoboxx/go-discovery v0.0.0-20181214185844-c169e2d45a22/go.mod h1:aLs/g36oxHORDZUoyuDVxh5kNiELQO4c2v1rdQ4Tbmw=
-github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8 h1:WeOVgiqhiPCt8s35Zu9CAN+s5ts05B2fYZ42+/H64cA=
-github.com/promoboxx/go-glitch v0.0.0-20210519154957-ca56d953e5a8/go.mod h1:kfv+hFEkBw7w6LQzoCR2Kqp7XCdvc73HIHoTGIKmSvk=
 github.com/promoboxx/go-glitch v0.0.0-20240524115203-9ec2e145ebc5 h1:Dn8c4B26+yxnVi7On0P/zKBDDEi93jEd6btXD+4bjQ0=
 github.com/promoboxx/go-glitch v0.0.0-20240524115203-9ec2e145ebc5/go.mod h1:kfv+hFEkBw7w6LQzoCR2Kqp7XCdvc73HIHoTGIKmSvk=
 github.com/promoboxx/go-metric-client v0.0.0-20201112163557-b8fada91c33a h1:LFemFDmhSktQvGTxENTTigWsHLROeOnu4ji4fJve4+0=

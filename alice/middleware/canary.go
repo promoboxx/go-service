@@ -12,19 +12,15 @@ const (
 )
 
 func DetermineCanaryMiddlewareFunc() func(http.Handler) http.Handler {
-	return func(h http.Handler) http.Handler {
-		return DetermineCanaryMiddlewareFunc()(h)
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			version := r.Header.Get(HeaderCanaryVersion)
+			if version != "" {
+				ctx := context.WithValue(r.Context(), contextkey.ContextKeyCanary, version)
+				r = r.WithContext(ctx)
+			}
+
+			next.ServeHTTP(w, r)
+		})
 	}
-}
-
-func DetermineCanaryContext(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		version := r.Header.Get(HeaderCanaryVersion)
-		if version != "" {
-			ctx := context.WithValue(r.Context(), contextkey.ContextKeyCanary, version)
-			r = r.WithContext(ctx)
-		}
-
-		h.ServeHTTP(w, r)
-	})
 }

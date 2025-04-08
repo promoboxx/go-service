@@ -11,6 +11,12 @@ const (
 	HeaderCanaryVersion = "X-Canary-Version"
 )
 
+func DetermineCanaryMiddlewareFunc() func(http.Handler) http.Handler {
+	return func(h http.Handler) http.Handler {
+		return DetermineCanaryMiddlewareFunc()(h)
+	}
+}
+
 func DetermineCanaryContext(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		version := r.Header.Get(HeaderCanaryVersion)

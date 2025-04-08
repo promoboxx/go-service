@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	HeaderCanaryVersion = "x-canary-version"
+	HeaderCanaryVersion = "X-Canary-Version"
 )
 
 func DetermineCanaryContext(h http.Handler) http.Handler {

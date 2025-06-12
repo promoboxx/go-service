@@ -56,3 +56,7 @@ func GetDBFromContext[T any](ctx context.Context, f func(*sql.DB) T) T {
 func GetCanaryVersionFromContext(ctx context.Context) string {
 	return getStringFromContext(ctx, contextkey.ContextKeyCanary)
 }
+
+func GetJWTFromContext(ctx context.Context) string {
+	return getStringFromContext(ctx, contextkey.ContextKeyJWT)
+}

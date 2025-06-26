@@ -12,8 +12,11 @@ func HandlerFunc(h func(w http.ResponseWriter, r *http.Request) error) http.Hand
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := h(w, r)
 		if err != nil {
-			log := GetLoggerFromContext(r.Context())
-			log.Printf("Error from handler: %v", err)
+			logger, err := GetLoggerFromCtx(r.Context())
+			if err != nil {
+				logger = MustGetLoggerFromContext(r.Context())
+			}
+			logger.Printf("Error from handler: %v", err)
 		}
 	})
 }

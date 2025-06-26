@@ -16,9 +16,12 @@ func Recovery(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				log := GetLoggerFromContext(r.Context())
+				logger, err := GetLoggerFromCtx(r.Context())
+				if err != nil {
+					logger = MustGetLoggerFromContext(r.Context())
+				}
 				stack := stack(3)
-				log.Printf("PANIC: %s\n%s", err, stack)
+				logger.Printf("PANIC: %s\n%s", err, stack)
 
 				honeybadger.Notify(err)
 

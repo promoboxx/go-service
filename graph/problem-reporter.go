@@ -8,7 +8,11 @@ import (
 )
 
 func ReportProblem(ctx context.Context, prob *glitch.GQLProblem, logMsg string) error {
-	middleware.GetLoggerFromContext(ctx).WithError(prob).Error(logMsg)
+	logger, err := middleware.GetLoggerFromCtx(ctx)
+	if err != nil {
+		logger = middleware.MustGetLoggerFromContext(ctx)
+	}
+	logger.WithError(prob).Error(logMsg)
 	return prob
 }
 

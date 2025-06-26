@@ -4,3 +4,5 @@ secret.env
 /.idea
 tmp
 .direnv
+.opencode/
+opencode

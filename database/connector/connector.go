@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/url"
+	"strings"
 	"sync"
 
 	"github.com/lib/pq"
@@ -27,6 +28,7 @@ type sqlDBConnector struct {
 	maxOpenConns        int
 	maxIdleConns        int
 	dbName              string
+	hostName            string
 	driver              string
 	dbUser              string
 	dbPass              string
@@ -51,7 +53,8 @@ func NewSQLDBConnector(maxOpenConns, maxIdleConns int, dbName string, driver str
 	return &sqlDBConnector{
 		maxOpenConns:        maxOpenConns,
 		maxIdleConns:        maxIdleConns,
-		dbName:              dbName,
+		dbName:              strings.ReplaceAll(dbName, "-", "_"),
+		hostName:            fmt.Sprintf("%s-db", dbName),
 		driver:              driver,
 		dbUser:              dbUser,
 		dbPass:              dbPass,
@@ -112,7 +115,7 @@ func (c *sqlDBConnector) getDbFromMap(driver string, conn string) (result *sql.D
 }
 
 func (c *sqlDBConnector) getConnectionString() (string, error) {
-	dbAddr, dbPort, err := c.finder.FindHostPort(fmt.Sprintf("%s-db", c.dbName))
+	dbAddr, dbPort, err := c.finder.FindHostPort(c.hostName)
 	if err != nil {
 		return "", err
 	}
